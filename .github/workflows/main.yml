@@ -1,0 +1,71 @@
+name: Image-bereitstellung 
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Node aktualisieren
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Abhängigkeiten installieren
+        run: npm install
+
+      - name: React Test ausführung
+        run: npm run test
+
+  image_push:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      # build job soll den build ordner als artefakt hochladen
+      # schritt 1: code auschecken
+      - name: Check out code
+        uses: actions/checkout@v4
+      # schritt 2: node installieren
+      # wir probieren diesen schritt wegzulassen
+      - name: Node aktualisieren
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      # schritt 3: abhängigkeiten installieren
+      - name: Abhängigkeiten installieren
+        run: npm install
+
+      - name: Dateipfad anzeigen
+        run: ls -la
+
+      # Schritt 3: Projekt-Build bauen und Image erstellen
+      - name: Docker Image erstellen und taggen
+        env:
+          IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/reactappimage
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker buildx build \
+            --tag $IMAGE_NAME:$IMAGE_TAG \
+            --tag $IMAGE_NAME:latest \
+            .
+
+      # Step 2: Log in to Docker Hub (if accessing private images)
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: dilarago
+          password: ${{ secrets.PASSWORD }}
+
+        # Schritt 5: Docker Image pushen
+      - name: Docker Image pushen
+        env:
+          IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/reactappimage
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker push $IMAGE_NAME:$IMAGE_TAG
+          docker push $IMAGE_NAME:latest
