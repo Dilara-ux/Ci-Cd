@@ -11,5 +11,5 @@ resource "aws_instance" "docker_instance" {
   }
   
 
-  key_name = "ec22" # SSH-Schlüssel anpassen (optional)
+  key_name = "cicd" # SSH-Schlüssel anpassen (optional)
 }

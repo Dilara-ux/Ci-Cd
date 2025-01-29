@@ -7,7 +7,7 @@
   vars:
     # Definieren Sie den Hash (z. B. GitHub-SHA). Dies sollte dynamisch gesetzt werden.
     docker_image_tag: "{{ lookup('env', 'GITHUB_SHA') | default('latest') }}"
-    docker_image_name: 'klatschenderaffe/reactappimage'
+    docker_image_name: 'dilarago/reactappimage'
 
   tasks:
     - name: System aktualisieren
@@ -32,14 +32,14 @@
     # # 4. Docker Image von Dockerhub pullen
     # - name: Docker Images pullen
     #   community.docker.docker_image:
-    #     name: 'klatschenderaffe/reactappimage'
+    #     name: 'dilarago/reactappimage'
     #     tag: latest
     #     source: pull
     # # 5. Docker Container starten
     # - name: Docker Container starten
     #   community.docker.docker_container:
     #     name: react-app-container
-    #     image: 'klatschenderaffe/reactappimage:latest'
+    #     image: 'dilarago/reactappimage:latest'
     #     state: started
     #     restart_policy: always
     #     published_ports:

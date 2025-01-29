@@ -1,4 +1,4 @@
-name: Terraform CI/CD Pipeline
+name: Terraform CI/CD 
 
 on:
   workflow_run:
