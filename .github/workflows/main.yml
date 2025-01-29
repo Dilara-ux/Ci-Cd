@@ -59,7 +59,10 @@ jobs:
         uses: docker/login-action@v2
         with:
           username: dilarago
-          password: ${{ secrets.PASSWORD }}
+          password: ${{ secrets.PASSWORD }}  
+
+
+          
 
         # Schritt 5: Docker Image pushen
       - name: Docker Image pushen
